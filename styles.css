@@ -27,7 +27,7 @@ input[type="email"],input[type="password"]{
 }
 #dashboard-content{
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   flex-direction: row;
   gap: 1rem;
   padding: 1rem;
@@ -37,7 +37,7 @@ input[type="email"],input[type="password"]{
 #left-container{
   display: flex;
   border: 1px solid black;
-  flex-grow: 1;
+  flex-grow: 2;
   flex-direction: column;
 
 }
@@ -45,7 +45,7 @@ input[type="email"],input[type="password"]{
 #right-container{
   display: flex;
   border: 1px solid black;
-  flex-grow: 1;
+  flex-grow: 2;
   flex-direction: column;
 }
 

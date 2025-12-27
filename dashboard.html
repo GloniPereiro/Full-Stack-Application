@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login — Projekt inżynierski</title>
+    <title>Dashboard — Projekt inżynierski</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,20 +12,16 @@
     <pre id="output"></pre>
     <div id="dashboard-content">
         <div id="left-container">
-            <h3>Twoje pliki</h3>
-            <div id="file-list">
-                <!-- Lista plików zostanie tutaj załadowana dynamicznie -->
-            </div>
+            <h3>Twoje pliki:</h3>
+            <ul id="file-list"></ul>
         </div>
         <div id="right-container">
             <h3>Prześlij nowy plik</h3>
             <form id="upload-form">
-                <input type="file" id="file-input" name="file" required />
-                <br />
-                <button id="upload-button" type="submit">     
-                    Prześlij plik
-                </button>
+                <input type="file" name="file" />
+                <button type="submit">Wyślij plik</button>
             </form>
+
         </div>
     </div>
     <script src="dashboard.js"></script>
