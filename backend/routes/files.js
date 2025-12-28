@@ -1,69 +1,39 @@
 console.log("ŁADUJĘ PLIK FILES.JS:", __filename);
 
-
 const express = require("express");
 const router = express.Router();
-const fileController = require("../controllers/filesController");
-const authMiddleware = require("../middleware/authMiddleware");
 const multer = require('multer');
-//trasa do obsługi plików które są chronione przez middleware do autoryzacji użytkownika 
+const authMiddleware = require("../middleware/authMiddleware");
+const fileController = require("../controllers/filesController");
 
+// konfiguracja uploadu
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/'); //katalog docelowy do przechowywania plików
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname); //nazwa pliku z prefiksem czasowym
-    }
+    destination: (req, file, cb) => cb(null, 'uploads/'),
+    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
-const upload = multer({ storage }); //konfiguracja multer do obsługi przesyłania plików
-//upload pliku
+const upload = multer({ storage });
+
+// LISTA PLIKÓW
+router.get('/', authMiddleware, fileController.listFiles);
+
+// UPLOAD
 router.post('/upload', authMiddleware, upload.single('file'), (req, res) => {
-    res.json({ ok: true, message: 'Plik zapiany', file: req.file });
+    res.json({ ok: true, message: 'Plik zapisany', file: req.file });
 });
 
+// USUWANIE
+router.delete('/:filename', authMiddleware, fileController.deleteFile);
 
-const fs = require('fs');
-const path = require('path');
+// POBIERANIE
+router.get('/download/:filename', authMiddleware, fileController.downloadFile);
 
-router.get('/', authMiddleware, (req, res) => {
-    const uploadDir = path.join(process.cwd(), 'uploads');
+// ZMIANA NAZWY
+router.put('/:filename', authMiddleware, fileController.renameFile);
 
-    console.log("UPLOAD DIR:", uploadDir);
-    console.log("EXISTS:", fs.existsSync(uploadDir));
-
-    fs.readdir(uploadDir, (err, files) => {
-        if (err) {
-            return res.status(500).json({ ok: false, message: 'Błąd odczytu folderu' });
-        }
-
-        const fileList = files.map(filename => ({
-            name: filename,
-            url: `/uploads/${filename}`
-        }));
-
-        res.json({ ok: true, files: fileList });
-    });
+// TEST
+router.get('/test', (req, res) => {
+    console.log("TEST ENDPOINT DZIAŁA");
+    res.json({ ok: true });
 });
 
-router.delete('/:filename', authMiddleware, (req, res) => {
-    const filename = req.params.filename;
-    const filePath = path.join(process.cwd(), 'uploads', filename);
-
-    // sprawdź czy plik istnieje
-    if (!fs.existsSync(filePath)) {
-        return res.status(404).json({ ok: false, message: 'Plik nie istnieje' });
-    }
-
-    // usuń plik
-    fs.unlink(filePath, (err) => {
-        if (err) {
-            return res.status(500).json({ ok: false, message: 'Błąd podczas usuwania pliku' });
-        }
-
-        res.json({ ok: true, message: 'Plik usunięty' });
-    });
-});
-
-
-module.exports = router; //eksportowanie routera do użycia w server.js
+module.exports = router;

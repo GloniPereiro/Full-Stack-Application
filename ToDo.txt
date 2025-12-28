@@ -1,0 +1,50 @@
+1. Uporządkowanie backendu
+dodać folder middleware/ i przenieść tam JWT middleware (jeśli jeszcze nie jest)
+
+dodać folder controllers/ dla plików logicznych (już masz, ale uporządkujemy)
+
+dodać folder routes/ dla wszystkich tras (już masz, ale rozbudujemy)
+
+2. Rozszerzenie systemu użytkownika
+dodać endpoint /api/user/me zwracający dane użytkownika z tokena
+(email, rola, ID — na razie mock)
+
+dodać endpoint /api/auth/logout (prosty — frontend usuwa token)
+
+3. Dashboard — realne dane
+wyświetlić na dashboardzie:
+
+email zalogowanego użytkownika
+
+komunikat powitalny
+
+przycisk „Wyloguj”
+
+dodać ochronę dashboardu (jeśli nie ma tokena → redirect do loginu)
+
+4. Przygotowanie pod system plików
+stworzyć strukturę pod /api/files
+
+dodać endpoint:
+
+GET /api/files — lista plików (na razie mock)
+
+przygotować middleware do autoryzacji dla plików
+
+5. (Opcjonalnie) Refaktor kodu frontendu
+przenieść logikę fetch do osobnych funkcji
+
+dodać obsługę błędów w bardziej czytelny sposób
+
+🔥 Efekt po jutrzejszym dniu
+Będziesz miał:
+
+pełny system logowania,
+
+działający dashboard z danymi użytkownika,
+
+chronione API,
+
+przygotowaną strukturę pod upload i zarządzanie plikami,
+
+backend, który wygląda jak prawdziwa aplikacja produkcyjna.
