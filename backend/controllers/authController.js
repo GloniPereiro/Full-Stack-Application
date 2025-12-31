@@ -11,8 +11,8 @@ exports.login = async (req, res, next) => {
         if (!user) {
             const error = new Error('Nie znaleziono użytkownika o podanym emailu');
             error.status = 401;
-            throw error;
             //return res.status(401).json({ ok: false, message: 'Nie znaleziono użytkownika' });
+            return next(error);
         }
 
         // 2. Porównujemy hasło z bazy (zaszyfrowane) z tym z formularza
@@ -20,12 +20,26 @@ exports.login = async (req, res, next) => {
         if (!isMatch) {
             const error = new Error('Błędne hasło');
             error.status = 401;
-            throw error;
             //return res.status(401).json({ ok: false, message: 'Błędne hasło' });
+            return next(error);
+        }
+        // Sprawdzenie czy login i hasło nie zawierają niebezpiecznych znaków
+        // eslint-disable-next-line no-control-regex
+        const dangerousChars = /[<>:"'/\\=;|?*\x00-\x1F]/;
+        if (dangerousChars.test(email) || dangerousChars.test(password)) {
+            const error = new Error('Nieprawidłowe znaki w danych wejściowych');
+            error.status = 400;
+            return next(error);
         }
 
         // 3. Jeśli wszystko OK, generujemy token
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(
+            { 
+                userId: user._id,
+                email: user.email,
+                role: user.role
+            },
+            process.env.JWT_SECRET, { expiresIn: '1h' });
         
         res.json({
             ok: true,
@@ -33,9 +47,9 @@ exports.login = async (req, res, next) => {
             token
         });
 
-    } catch (error) {
-        next(error);
-        //res.status(500).json({ ok: false, message: 'Błąd serwera' });
+    } catch (err) {
+    //res.status(500).json({ ok: false, message: 'Błąd serwera' });
+    next(err);
     }
 };
 
@@ -48,10 +62,17 @@ exports.register = async (req, res, next) => {
         if (existingUser) {
             const error = new Error('Użytkownik już istnieje');
             error.status = 400;
-            throw error;
             //return res.status(400).json({ ok: false, message: 'Użytkownik już istnieje' })
+            return next(error);
         }
-
+        // Walidacja prostych znaków w emailu i haśle
+        // eslint-disable-next-line no-control-regex
+        const dangerousChars = /[<>:"'/\\=;|?*\x00-\x1F]/;
+        if (dangerousChars.test(email) || dangerousChars.test(password)) {
+            const error = new Error('Nieprawidłowe znaki w danych wejściowych');
+            error.status = 400;
+            return next(error);
+        }
         // Zaszyfruj hasło (10 to siła szyfrowania)
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -63,8 +84,8 @@ exports.register = async (req, res, next) => {
 
         await newUser.save();
         res.status(201).json({ ok: true, message: 'Użytkownik stworzony!' });
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
         //res.status(500).json({ ok: false, message: 'Błąd podczas rejestracji' });
     }
 };

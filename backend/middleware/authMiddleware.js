@@ -22,8 +22,9 @@ module.exports = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (err) {
-        const error = new Error("Nieprawidłowy token");
-        error.status = 403;
-        next(error);
+        next(err);
     }
 };
+
+
+

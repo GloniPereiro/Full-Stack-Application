@@ -5,6 +5,7 @@ const router = express.Router();
 const multer = require('multer');
 const authMiddleware = require("../middleware/authMiddleware");
 const fileController = require("../controllers/filesController");
+const requireRole = require("../middleware/requireRole");
 
 // konfiguracja uploadu
 const storage = multer.diskStorage({
@@ -17,12 +18,10 @@ const upload = multer({ storage });
 router.get('/', authMiddleware, fileController.listFiles);
 
 // UPLOAD
-router.post('/upload', authMiddleware, upload.single('file'), (req, res) => {
-    res.json({ ok: true, message: 'Plik zapisany', file: req.file });
-});
+router.post('/upload', authMiddleware, upload.single('file'), fileController.uploadFile);
 
 // USUWANIE
-router.delete('/:filename', authMiddleware, fileController.deleteFile);
+router.delete('/:filename', authMiddleware, requireRole('admin'), fileController.deleteFile);
 
 // POBIERANIE
 router.get('/download/:filename', authMiddleware, fileController.downloadFile);

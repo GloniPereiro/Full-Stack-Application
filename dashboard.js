@@ -1,5 +1,19 @@
+
 const output = document.getElementById('output'); //pobieranie elementu do wyświetlania danych użytkownika
 const token = sessionStorage.getItem('token');
+const messageBox = document.getElementById('message');
+console.log("messageBox:", messageBox);
+
+
+function showError(msg) {
+    messageBox.textContent = msg;
+    messageBox.style.color = 'red';
+}
+
+function showSuccess(msg) {
+    messageBox.textContent = msg;
+    messageBox.style.color = 'green';
+}
 
 if (!token) {
   // Brak tokena – wróć do logowania
@@ -50,9 +64,7 @@ async function loadFiles() {
     }
   });
 
-  console.log(response); // sprawdź status
   const text = await response.text();
-  console.log(text); // zobacz co backend zwraca
 
   try {
     const data = JSON.parse(text);
@@ -90,6 +102,9 @@ document.addEventListener("click", async (e) => {
 
     if (data.ok) {
       loadFiles(); // odśwież listę
+    }
+    else {
+      showError(data.message);
     }
   }
 });
@@ -135,22 +150,43 @@ document.addEventListener("click", async (e) => {
 //Zmiana nazwy pliku
 document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("rename-btn")) {
+
     const oldFilename = e.target.dataset.name;
-    const newFilename = prompt("Podaj nową nazwę pliku:", oldFilename);
     const token = sessionStorage.getItem("token");
-    //wyświetlenie błędu jeśli nie podano nazwy
-    if (!newFilename) {
-      alert("Nazwa pliku nie może być pusta.");
+
+    const newFilenameRaw = prompt("Podaj nową nazwę pliku:", oldFilename);
+
+    if (!newFilenameRaw || !newFilenameRaw.trim()) {
+      alert("Nazwa pliku jest wymagana.");
       return;
     }
-    //wyświetlenie błędu jeśli nazwa zawiera znaki niedozwolone
+
+    // wyciągamy rozszerzenie z oryginalnej nazwy
+const extension = oldFilename.includes(".")
+  ? oldFilename.substring(oldFilename.lastIndexOf("."))
+  : "";
+
+// sprawdzamy, czy użytkownik podał PRAWDZIWE rozszerzenie
+const userHasExtension =
+  newFilenameRaw.includes(".") &&
+  newFilenameRaw.split(".").pop().trim().length > 0;
+
+// jeśli użytkownik nie podał rozszerzenia → dodajemy je automatycznie
+const newFilename = userHasExtension
+  ? newFilenameRaw.trim()
+  : newFilenameRaw.trim() + extension;
+
+
+    // niedozwolone znaki
     const invalidChars = /[<>:"\/\\|?*\x00-\x1F]/g;
     if (invalidChars.test(newFilename)) {
       alert("Nazwa pliku zawiera niedozwolone znaki.");
       return;
     }
-    
-    const response = await fetch(`http://localhost:5000/api/files/${oldFilename}`, {
+
+    const encodedOldName = encodeURIComponent(oldFilename);
+
+    const response = await fetch(`http://localhost:5000/api/files/${encodedOldName}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -158,13 +194,18 @@ document.addEventListener("click", async (e) => {
       },
       body: JSON.stringify({ newName: newFilename })
     });
+
     const data = await response.json();
     console.log(data);
+
     if (data.ok) {
-      loadFiles(); // odśwież listę
+      loadFiles();
+    } else {
+      showError(data.message);
     }
   }
 });
+
 // Przykład użycia funkcji renameFile
 // renameFile("stara_nazwa.txt", "nowa_nazwa.txt");
 
