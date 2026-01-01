@@ -14,10 +14,10 @@ function showSuccess(msg) {
     messageBox.textContent = msg;
     messageBox.style.color = 'green';
 }
-
+// Sprawdzenie tokena przy ładowaniu strony
 if (!token) {
   // Brak tokena – wróć do logowania
-  window.location.href = '/login.html';
+  window.location.href = '/frontend/login.html';
 } else {
   // Przykładowe wywołanie chronionego endpointu
   fetch("http://localhost:5000/api/protected", {
@@ -27,10 +27,9 @@ if (!token) {
   })
   .then(res => res.json())
   .then(data => {
-    if (data.ok) {
-      output.textContent = JSON.stringify(data, null, 2); // Wyświetlanie danych użytkownika
-    } else {
-      output.textContent = data.message || 'Błąd autoryzacji';
+    if (data.message === "jwt expired") {
+      sessionStorage.removeItem("token");
+      window.location.href = "/frontend/login.html";
     }
   })
   .catch(() => {
@@ -52,6 +51,9 @@ document.getElementById("upload-form").addEventListener("submit", async (e) => {
   });
 
   const data = await response.json();
+  if(!data.ok) {
+    showError(data.message);
+  }
   console.log(data);
 });
 
@@ -63,9 +65,7 @@ async function loadFiles() {
       Authorization: "Bearer " + token
     }
   });
-
   const text = await response.text();
-
   try {
     const data = JSON.parse(text);
     if (data.ok) {
@@ -73,7 +73,8 @@ async function loadFiles() {
       list.innerHTML = "";
       data.files.forEach(file => {
         const li = document.createElement("li");
-        li.innerHTML = `<a href="http://localhost:5000${file.url}" target="_blank">${file.name}</a> <button data-name="${file.name}" class="download-btn">Pobierz</button>
+        li.innerHTML = `<a href="http://localhost:5000${file.url}" target="_blank">${file.name}</a> 
+        <button data-name="${file.name}" class="download-btn">Pobierz</button>
         <button data-name="${file.name}" class="delete-btn">Usuń</button>
         <button data-name="${file.name}" class="rename-btn">Zmień nazwę</button>`;
         list.appendChild(li);
@@ -206,7 +207,58 @@ const newFilename = userHasExtension
   }
 });
 
-// Przykład użycia funkcji renameFile
-// renameFile("stara_nazwa.txt", "nowa_nazwa.txt");
+// Obsługa formularza tworzenia użytkownika (tylko dla adminów)
+document.getElementById("admin-create-user").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
+  const email = document.getElementById("new-email").value;
+  const password = document.getElementById("new-password").value;
+  const role = document.getElementById("new-role").value;
+
+  const token = sessionStorage.getItem("token");
+
+  const response = await fetch("http://localhost:5000/api/admin/users/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({ email, password, role })
+  });
+
+  const data = await response.json();
+
+  if (data.ok) {
+    alert("Użytkownik utworzony");
+  } else {
+    alert(data.message || "Błąd");
+  }
+});
+// Ładowanie logów (tylko dla adminów)
+document.getElementById("load-logs").addEventListener("click", async () => {
+  const token = sessionStorage.getItem("token");
+
+  const response = await fetch("http://localhost:5000/api/admin/logs", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  const data = await response.json();
+
+  const list = document.getElementById("logs-list");
+  list.innerHTML = "";
+
+  if (data.ok) {
+    console.log(data);
+
+    data.logs.forEach(Log => {
+      const li = document.createElement("li");
+      li.textContent = `${Log.action} — ${Log.details || ""} — ${Log.createdAt}`;
+      list.appendChild(li);
+    });
+  } else {
+    alert(data.message || "Błąd");
+  }
+});
 

@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
     next(err);
     }
 };
-
+/*
 exports.register = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -89,3 +89,4 @@ exports.register = async (req, res, next) => {
         //res.status(500).json({ ok: false, message: 'Błąd podczas rejestracji' });
     }
 };
+*/

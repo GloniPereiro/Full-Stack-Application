@@ -12,31 +12,6 @@ function showSuccess(msg) {
     messageBox.style.color = 'green';
 }
 
-// REJESTRACJA
-registerForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const regEmail = registerForm.elements['reg-email'].value.trim();
-    const regPassword = registerForm.elements['reg-password'].value.trim();
-
-    try {
-        const response = await fetch('http://localhost:5000/api/userRoutes', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: regEmail, password: regPassword })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            showSuccess(data.message);
-        } else {
-            showError(data.message);
-        }
-    } catch (error) {
-        showError("Wystąpił błąd połączenia z serwerem.");
-    }
-});
 
 // LOGOWANIE
 loginForm.addEventListener('submit', async (e) => {
@@ -57,7 +32,7 @@ loginForm.addEventListener('submit', async (e) => {
         if (response.ok) {
             showSuccess(data.message);
             sessionStorage.setItem('token', data.token);
-            window.location.href = '/dashboard.html';
+            window.location.href = '/frontend/dashboard.html';
         } else {
             showError(data.message);
         }

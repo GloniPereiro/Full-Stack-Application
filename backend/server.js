@@ -13,9 +13,9 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/files', require('./routes/files'));
 app.use('/api/protected', require('./routes/protected'));
-app.use('/api/logs', require('./routes/logRoutes'));
-
-app.use('/uploads', express.static('uploads'));
+app.use('/api/admin/logs', require('./routes/admin/logs'));
+app.use('/api/uploads', express.static('uploads'));
+app.use('/api/admin/users', require('./routes/admin/users'));
 
 // --- DATABASE ---
 mongoose.connect(process.env.MONGO_URI)

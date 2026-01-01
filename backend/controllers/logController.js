@@ -6,7 +6,7 @@ exports.getLogs = async (req, res, next) => {
 
         res.json({
             ok: true,
-            data: logs
+            logs
         });
     } catch (err) {
         next(err);
