@@ -12,42 +12,43 @@
         <p id="description">Manage your files easily and securely.</p>
     </header>
 
-    <div id="dashboard-content">
-        <div id="left-container">
-            <h3>Twoje pliki:</h3>
-            <ul id="file-list"></ul>
-        </div>
-        <div id="right-container">
-            <h3>Prześlij nowy plik</h3>
-            <form id="upload-form">
-                <input type="file" name="file" />
-                <button type="submit">Wyślij plik</button>
+    <container id="dashboard-container">
+        <section id="dashboard-content">
+            <div id="left-container">
+                    <h3>Twoje pliki:</h3>
+                    <ul id="file-list"></ul>
+            </div>
+            <div id="right-container">
+                <h3>Prześlij nowy plik</h3>
+                <form id="upload-form">
+                    <input type="file" name="file" id="file-input" style="display: none;"/>
+                    <label for="file-input" id="file-label">Wybierz plik</label>
+                    <button type="submit">Wyślij plik</button>
+                </form>
+            </div>
+        </section>
+        <div id="message"></div>
+
+        <section id="admin-panel">
+            <h2>Panel administratora</h2>
+            <h3>Utwórz nowego użytkownika</h3>
+            <form id="admin-create-user" autocomplete="off">
+                <input type="email" name="fake-email" style="display:none"> 
+                <input type="password" name="fake-pass" style="display:none">
+                <input type="email" id="new-email" autocomplete="new-email" placeholder="Email użytkownika">
+                <input type="password" id="new-password" autocomplete="new-password" placeholder="Hasło">
+                <select id="new-role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit">Utwórz użytkownika</button>
             </form>
 
-        </div>
-    </div>
-
-    <div id="message"></div>
-
-    <section id="admin-panel">
-        <h2>Panel administratora</h2>
-        <h3>Utwórz nowego użytkownika</h3>
-        <form id="admin-create-user" autocomplete="off">
-            <input type="email" name="fake-email" style="display:none"> 
-            <input type="password" name="fake-pass" style="display:none">
-            <input type="email" id="new-email" autocomplete="new-email" placeholder="Email użytkownika">
-            <input type="password" id="new-password" autocomplete="new-password" placeholder="Hasło">
-            <select id="new-role">
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-            </select>
-            <button type="submit">Utwórz użytkownika</button>
-        </form>
-
-        <h3>Logi systemowe</h3>
-        <button id="load-logs">Załaduj logi</button>
-        <ul id="logs-list"></ul>
-    </section>
+            <h3>Logi systemowe</h3>
+            <button id="load-logs">Załaduj logi</button>
+            <ul id="logs-list"></ul>
+        </section>
+    </container>
 
     <script src="dashboard.js"></script>
 </body>
