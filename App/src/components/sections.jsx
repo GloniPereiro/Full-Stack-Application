@@ -1,4 +1,4 @@
-import Zasoby from "./Content/Zasoby";
+import Zasoby from "./cards/cardZasoby/Zasoby";
 import Uploady from "./Content/Upload";
 import Users from "./Content/Users";
 import Uprawnienia from "./Content/Uprawnienia";

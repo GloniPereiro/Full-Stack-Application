@@ -1,5 +1,4 @@
 console.log("ŁADUJĘ PLIK FILES.JS:", __filename);
-
 const express = require("express");
 const router = express.Router();
 const multer = require('multer');
@@ -10,9 +9,8 @@ const listFile = require("../../controllers/files/listFile");
 const deleteFile = require("../../controllers/files/deleteFile"); 
 const renameFile = require("../../controllers/files/renameFile"); 
 const downloadFile = require("../../controllers/files/downloadFile");
-const renameValidation = require("../../validation/rename");
+const renameValidation = require("../../middleware/renameValidation.js");
 
-console.log("uploadFile path:", require.resolve("../../controllers/files/uploadFile"));
 
 // konfiguracja uploadu
 const storage = multer.diskStorage({

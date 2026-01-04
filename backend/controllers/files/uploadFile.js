@@ -1,6 +1,5 @@
 const log = require('../../models/log');
-const file = require('../../models/file');
-
+const File = require('../../models/file');
 
 const uploadFile = async (req, res, next) => {
     try {
@@ -9,28 +8,23 @@ const uploadFile = async (req, res, next) => {
             error.status = 400;
             return next(error);
         }
-        // walidacja żeby nazwa pliku nie była pusta
+
         if (req.file.originalname.trim() === '') {
             const error = new Error("Nazwa pliku nie może być pusta");
             error.status = 400;
             return next(error);
-        }
-        //walidacja żeby upload zawierał plik
-        if (!req.file) {
-            const error = new Error("Brak pliku w żądaniu");
-            error.status = 400;
-            return next(error)
         }
 
         // 🔥 Zapis logu
         await log.create({
             action: "UPLOAD",
             fileName: req.file.filename,
-            date: new Date(),   
+            date: new Date(),
             email: req.user.email
         });
 
-        await file.create({
+        // 🔥 Zapis metadanych do MongoDB
+        const savedFile = await File.create({
             name: req.file.filename,
             url: `/uploads/${req.file.filename}`,
             size: req.file.size,
@@ -38,16 +32,16 @@ const uploadFile = async (req, res, next) => {
             uploadedAt: new Date()
         });
 
-
+        // 🔥 Zwracamy dokument z bazy (z _id)
         res.json({
             ok: true,
             message: "Plik zapisany",
-            file: req.file
+            file: savedFile
         });
+
     } catch (err) {
         next(err);
     }
 };
 
 module.exports = uploadFile;
-

@@ -2,6 +2,59 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const Log = require('../models/log'); // jeśli masz logi
 
+// GET USERS 
+exports.getUsersController = async (req, res, next) => {
+    try { 
+        const users = await User.find().select("-password"); 
+        res.json({ ok: true, users }); 
+    } 
+    catch (err) { 
+        next(err);
+    } 
+};
+
+// DELETE USER 
+exports.deleteUserController = async (req, res,next) => {
+    try {
+        await User.findByIdAndDelete(req.params.id); 
+        await Log.create({
+            userId: req.user.id,
+            action: "ADMIN_DELETE_USER",
+            details: `Usunięto użytkownika: ${User.email}`
+        });
+
+        res.json({ ok: true }); 
+    } 
+    catch (err) { 
+        next(err); 
+    } 
+};
+
+//UpdateRole
+exports.updateUserRoleController = async (req, res,next) => { 
+    try { 
+        const { role } = req.body; 
+        const user = await User.findByIdAndUpdate( 
+            req.params.id, 
+            { role }, 
+            { new: true } 
+        ).select("-password"); 
+        
+        await Log.create({
+            userId: req.user.id,
+            action: "ADMIN_CHANGE_ROLE",
+            details: `Zmieniono rolę użytkownika ${user.email} na: ${role}`
+        });
+
+        res.json({ ok: true, user }); 
+    } 
+    catch (err) { 
+        next(err); 
+    } 
+};
+
+
+//To było
 exports.createUserController = async (req, res, next) => {
     try {
         const { email, password, role } = req.body;

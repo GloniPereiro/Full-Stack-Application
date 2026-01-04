@@ -10,7 +10,6 @@ module.exports = (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-
     if (!token) {
         const error = new Error("Brak tokena");
         error.status = 401;

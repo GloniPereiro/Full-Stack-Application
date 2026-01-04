@@ -1,5 +1,5 @@
 import { sections } from "../sections";
-import "./Zasoby.css";
+import "../cards/cardZasoby/Zasoby.css";
 
 export default function ContentHeader({ activeSection }) {
   return (

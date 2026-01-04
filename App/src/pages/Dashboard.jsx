@@ -1,7 +1,6 @@
 import { useState } from "react";
 import MainLayout from "../components/MainLayout";
 import { sections } from "../components/sections";
-import ContentHeader from "../components/Content/ContentHeader";
 
 export default function Dashboard() {
   const [activeSection, setActiveSection] = useState("zasoby");
