@@ -1,38 +1,39 @@
-import Zasoby from "./cards/cardZasoby/Zasoby";
-import Uploady from "./Content/Upload";
-import Users from "./Content/Users";
-import Uprawnienia from "./Content/Uprawnienia";
-import Monitoring from "./Content/Monitoring";
-import Ustawienia from "./Content/Ustawienia";
-import Logi from "./Content/Logi";
+import Zasoby from "./cardZasoby/Zasoby";
+import Uploady from "./Upload";
+import UsersComponent from "./Users";
+import Uprawnienia from "./Uprawnienia";
+import Monitoring from "./Monitoring";
+import Ustawienia from "./Ustawienia";
+import Logi from "./Logi";
+import { Folders, Upload, Users, UserLock, ChartLine, Settings, Logs} from "lucide-react"
 
 export const sections = {
   zasoby: {
-    label: "📁 Zasoby",
+    label: <><Folders /> Zasoby</>,
     component: <Zasoby />
   },
   uploady: {
-    label: "⬆️ Uploady",
+    label: <><Upload /> Prześlij</>,
     component: <Uploady />
   },
   users: {
-    label: "👥 Użytkownicy",
-    component: <Users />
+    label: <><Users /> Użytkownicy</>,
+    component: <UsersComponent />
   },
   uprawnienia: {
-    label: "🔐 Uprawnienia",
+    label: <><UserLock /> Uprawnienia</>,
     component: <Uprawnienia />
   },
   monitoring: {
-    label: "📊 Monitoring",
+    label: <><ChartLine /> Monitoring</>,
     component: <Monitoring />
   },
   ustawienia: {
-    label: "⚙️ Ustawienia",
+    label: <><Settings /> Ustawienia</>,
     component: <Ustawienia />
   },
   logi: {
-    label: "🧾 Logi",
+    label: <><Logs /> Logi</>,
     component: <Logi />
   }
 };

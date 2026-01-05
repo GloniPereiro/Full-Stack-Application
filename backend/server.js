@@ -16,7 +16,7 @@ app.use('/api/protected', require('./routes/protected'));
 app.use('/api/admin/logs', require('./routes/admin/logs'));
 app.use('/api/uploads', express.static('uploads'));
 app.use('/api/admin/users', require('./routes/admin/users'));
-
+app.use('/api/monitoring', require('./routes/monitoring'));
 // --- DATABASE ---
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('Połączono z MongoDB'))

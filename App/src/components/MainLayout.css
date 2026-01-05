@@ -1,8 +1,8 @@
 * {
-  box-sizing: border-box;
-  font-weight: 100;
-  letter-spacing: 2px;
-  user-select: none;
+    box-sizing: border-box;
+    font-weight: 100;
+    letter-spacing: 2.5px;
+    user-select: none;
 }
 html::-webkit-scrollbar {
     display: none;
@@ -35,13 +35,12 @@ body {
     align-items: center;
 }
 h1{
-     font-size: 40px;
-  text-align: center;
-  animation: logoGlow 2s infinite alternate ease-in-out;
+    font-size: 40px;
+    text-align: center;
+    animation: logoGlow 2s infinite alternate ease-in-out;
 }
 .sidebar {  
     box-shadow: inset 0 0 40px #2A1427;
-
     grid-column: 1 / 2;
     grid-row: 3 / 4;
     padding: 16px;
@@ -57,17 +56,31 @@ h1{
 
 .main {  
     box-shadow: inset 0 0 40px #2A1427;
-
     grid-column: 3 / 4;
     grid-row: 3 / 4;
     background-color: #58004c80;
     border-radius: 16px;
     transition: transform 0.4s ease, box-shadow 10s ease;
 }
-.main:hover {
+.main:hover, .sidebar:hover {
     transform: scale(1.005);
     box-shadow: 0 0 40px #dc70ce41;
-
+}
+button {
+  background-color: transparent;
+  border: none;
+  font-size: clamp(14px, 1.2vw, 20px);
+  font-weight: 600;
+  cursor: pointer;
+  align-self: center;
+  text-shadow: 0 0 20px #2A1427;
+  color:#f004d1af;
+  transition: transform 0.3s ease;
+}
+button:hover, #file-label:hover{
+  transform: scale(1.1);
+  color:#ff7fee;
+  animation: none;
 }
 @keyframes logoGlow {
     0%, 100% { filter: drop-shadow(0 0 10px #DC70CE) drop-shadow(0 0 20px #DC70CE); transform: translateX(0); }

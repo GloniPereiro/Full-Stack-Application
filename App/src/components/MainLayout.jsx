@@ -1,8 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import ContentHeader from "./Content/ContentHeader";
+import ContentHeader from "./ContentHeader";
 import "./MainLayout.css";
-import "./Button.css";
 
 
 export default function MainLayout({ children, setActiveSection, activeSection }) {

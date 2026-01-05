@@ -1,0 +1,12 @@
+.list{
+    padding: 1rem;
+}
+.legend{
+    display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 40px 0.5fr;
+    border-bottom:1px solid #fefefe5d ;
+    padding-bottom: 1rem;
+}
+.legendText{
+    margin:auto;
+
+}
