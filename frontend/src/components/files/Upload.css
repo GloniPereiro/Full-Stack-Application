@@ -1,0 +1,36 @@
+.upload-form{
+    height: 63vh;
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+.label{
+    width:120px;
+    height: 120px;
+    border-radius: 100px;
+    margin: auto;
+    margin-bottom: 0;
+    margin-top: 0;
+    box-shadow: 0 0 100px #54ACBF;
+    border-radius: 100px;
+    background-color: #54abbf82;
+    transition: transform 1.5s ease;
+}
+.plus{
+    color: #2A1427;
+    transition: transform 1s ease;
+
+}
+.plus:hover{
+    transform: scale(1.1);
+}
+.description{
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 0;
+    text-shadow: 0 0 3px #54ACBF;
+}
+.button{
+    font-size: 1.5rem;
+}

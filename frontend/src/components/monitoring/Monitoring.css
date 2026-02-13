@@ -1,0 +1,7 @@
+.wykresy{
+    display: flex;
+}
+.wykres{
+    margin: auto;
+    width: 49%;
+}
